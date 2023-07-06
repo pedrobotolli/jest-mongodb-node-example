@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "jest-mongodb-node-app"
+  labels:
+    name: "jest-mongodb-node-app"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "jest-mongodb-node-app"
+  template:
+    metadata:
+      labels:
+        app: "jest-mongodb-node-app"  
+    spec:
+      containers:
+      - name: "jest-mongodb-node-app"
+        image: "us.icr.io/test-images/jest-mongodb-node-example:latest"
+        resources:
+          requests:
+            memory: 32Mi
+            cpu: 125m
+          limits:
+            memory: 32Mi
+            cpu: 125m
+        envFrom:
+        - secretRef:
+            name: "jest-mongodb-node-secrets"
+        ports:
+          - containerPort: 3001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "jest-mongodb-node-service"
+  labels:
+    app: "jest-mongodb-node-service"
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 3001
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: "jest-mongodb-node-app"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "jest-mongodb-node-service-cip"
+  labels:
+    app: "jest-mongodb-node-app"
+spec:
+  type: ClusterIP
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 3001
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: "jest-mongodb-node-app"
