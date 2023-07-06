@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: "jest-mongodb-node-app"
-        image: "us.icr.io/test-images/jest-mongodb-node-example:9"
+        image: "us.icr.io/test-images/jest-mongodb-node-example:12"
         resources:
           requests:
             memory: 32Mi
