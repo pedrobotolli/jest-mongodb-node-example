@@ -20,20 +20,20 @@ afterAll(async () => {
 });
 
 test('should return an empty list when list all the users', async () => {
-    const response = await request(app).get('/users');
+    const response = await request(app).get('/api/v1/users');
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(0);
 });
 
 test('should add a user', async () => {
-    const response = await request(app).post('/users').send(mockUsers[0]);
+    const response = await request(app).post('/api/v1/users').send(mockUsers[0]);
     expect(response.status).toBe(201);
     expect(response.body.name).toBe(mockUsers[0].name);
     
 });
 
 test('should return list with one user when list users', async () => {
-    const response = await request(app).get('/users');
+    const response = await request(app).get('/api/v1/users');
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);
     expect(response.body[0]).toHaveProperty('name', mockUsers[0].name);
@@ -41,19 +41,19 @@ test('should return list with one user when list users', async () => {
 });
 
 test('should get the created user', async () => {
-    const response = await request(app).get(`/users/${userId}`);
+    const response = await request(app).get(`/api/v1/users/${userId}`);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('name', mockUsers[0].name);
 });
 
 test('should update the created user', async () => {
-    const response = await request(app).put(`/users/${userId}`).send(mockUsers[1]);
+    const response = await request(app).put(`/api/v1/users/${userId}`).send(mockUsers[1]);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('name', mockUsers[1].name);
 });
 
 test('should delete the created user', async () => {
-    const response = await request(app).delete(`/users/${userId}`);
+    const response = await request(app).delete(`/api/v1/users/${userId}`);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('name', mockUsers[1].name);
 });
