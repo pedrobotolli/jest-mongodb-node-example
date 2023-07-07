@@ -1,29 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: default
   name: "jest-mongodb-node-app"
   labels:
     name: "jest-mongodb-node-app"
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: "jest-mongodb-node-app"
   template:
     metadata:
+      namespace: default
       labels:
         app: "jest-mongodb-node-app"  
     spec:
       containers:
       - name: "jest-mongodb-node-app"
-        image: "us.icr.io/test-images/jest-mongodb-node-example:12"
+        image: "pedrobotolli/jest-mongodb-node-example:1"
         resources:
           requests:
-            memory: 32Mi
-            cpu: 125m
+            memory: 512Mi
+            cpu: 128m
           limits:
-            memory: 32Mi
-            cpu: 125m
+            memory: 1024Mi
+            cpu: 256m
         envFrom:
         - secretRef:
             name: "jest-mongodb-node-secrets"
@@ -33,6 +35,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: default
   name: "jest-mongodb-node-service"
   labels:
     app: "jest-mongodb-node-service"
@@ -40,7 +43,7 @@ spec:
   type: NodePort
   ports:
     # the port that this service should serve on
-    - port: 80
+    - port: 3001
       targetPort: 3001
   # label keys and values that must match in order to receive traffic for this service
   selector:
@@ -49,6 +52,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: default
   name: "jest-mongodb-node-service-cip"
   labels:
     app: "jest-mongodb-node-app"
@@ -56,7 +60,7 @@ spec:
   type: ClusterIP
   ports:
     # the port that this service should serve on
-    - port: 80
+    - port: 3001
       targetPort: 3001
   # label keys and values that must match in order to receive traffic for this service
   selector:

@@ -11,4 +11,6 @@ docker run --env PORT=< CONTAINER PORT (e.g. 3001) > --env DB_URI=< your mongoDB
 
 To add your app to a Kubernetes cluster you need to create a .env file (described above) and run the following commands in your terminal:<br>
 kubectl create secret generic jest-mongodb-node-secrets --from-env-file=.env<br>
-kubectl apply -f deployment.yml
+kubectl apply -f deployment.yml<br>
+<br>
+(Remember to add your worker nodes ips to the mongoDB whitelist)<br>
